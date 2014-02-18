@@ -1,4 +1,5 @@
-﻿using Jurassic;
+﻿using System;
+using Jurassic;
 
 #if !NUNIT
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -20,6 +21,8 @@ namespace UnitTests
     [TestClass]
     public class ErrorTests
     {
+		public static string nl = Environment.NewLine;
+
         [TestMethod]
         public void Constructor()
         {
@@ -90,10 +93,10 @@ namespace UnitTests
         public void stack()
         {
             Assert.AreEqual(Undefined.Value, TestUtils.Evaluate(@"new Error('hah').stack"));
-            Assert.AreEqual("Error: myError\r\n" +
-                "    at trace (unknown:4)\r\n" +
-                "    at b (unknown:11)\r\n" +
-                "    at a (unknown:14)\r\n" +
+            Assert.AreEqual("Error: myError" + nl +
+                "    at trace (unknown:4)" + nl +
+                "    at b (unknown:11)" + nl +
+                "    at a (unknown:14)" + nl +
                 "    at unknown:16",
                 TestUtils.Evaluate(@"
                     function trace() {
@@ -111,8 +114,8 @@ namespace UnitTests
                         return b(3, 4, '\n\n', undefined, {});
                     }
                     a('first call, firstarg');"));
-            Assert.AreEqual("Error: this error is initialized at line 3, but thrown at line 5\r\n" +
-                "    at trace (unknown:5)\r\n" +
+            Assert.AreEqual("Error: this error is initialized at line 3, but thrown at line 5" + nl +
+                "    at trace (unknown:5)" + nl +
                 "    at unknown:11",
                 TestUtils.Evaluate(@"
                     function trace() {
@@ -125,12 +128,12 @@ namespace UnitTests
                         }
                     }
                     trace()"));
-            Assert.AreEqual("URIError: URI malformed\r\n" +
-                "    at decodeURI (native)\r\n" +
+            Assert.AreEqual("URIError: URI malformed" + nl +
+                "    at decodeURI (native)" + nl +
                 "    at unknown:1",
                 TestUtils.Evaluate(@"try { decodeURI('%z') } catch (e) { e.stack }"));
-            Assert.AreEqual("Error: two\r\n" +
-                "    at a (unknown:13)\r\n" +
+            Assert.AreEqual("Error: two" + nl +
+                "    at a (unknown:13)" + nl +
                 "    at unknown:17",
                 TestUtils.Evaluate(@"
                     function trace() {
@@ -153,9 +156,9 @@ namespace UnitTests
                     catch (e) {
                         e.stack
                     }"));
-            Assert.AreEqual("Error: inside callback\r\n" +
-                "    at anonymous (unknown:4)\r\n" +
-                "    at sort (native)\r\n" +
+            Assert.AreEqual("Error: inside callback" + nl +
+                "    at anonymous (unknown:4)" + nl +
+                "    at sort (native)" + nl +
                 "    at unknown:3",
                 TestUtils.Evaluate(@"
                     try {
@@ -166,7 +169,7 @@ namespace UnitTests
                     catch (e) {
                         e.stack
                     }"));
-            Assert.AreEqual("TypeError: undefined cannot be converted to an object\r\n" +
+            Assert.AreEqual("TypeError: undefined cannot be converted to an object" + nl +
                 "    at unknown:4",
                 TestUtils.Evaluate(@"
                     try {

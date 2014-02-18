@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Jurassic;
 using Jurassic.Library;
 
@@ -23,6 +24,8 @@ namespace UnitTests
     [TestClass]
     public class DocumentationSamples
     {
+		public static string FilesDir = Path.Combine ("..", "..", "..", "Unit Tests", "Core", "Sample Files");
+
         [TestMethod]
         public void EvaluateExpression1()
         {
@@ -41,7 +44,7 @@ namespace UnitTests
         public void ExecutingScript1()
         {
             var engine = new Jurassic.ScriptEngine();
-            engine.ExecuteFile(@"..\..\..\Unit Tests\Core\Sample Files\execute1.js");
+            engine.ExecuteFile(Path.Combine (FilesDir, "execute1.js"));
         }
 
         [TestMethod]
@@ -49,7 +52,7 @@ namespace UnitTests
         {
             var engine = new Jurassic.ScriptEngine();
             engine.SetGlobalValue("interop", 15);
-            engine.ExecuteFile(@"..\..\..\Unit Tests\Core\Sample Files\globals1.js");
+            engine.ExecuteFile(Path.Combine (FilesDir, "globals1.js"));
             Assert.AreEqual(20, engine.GetGlobalValue<int>("interop"));
         }
 
