@@ -3,9 +3,20 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Jurassic;
 using Jurassic.Compiler;
+
+#if !NUNIT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Category = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
+#else
+using NUnit.Framework;
+using TestClass = NUnit.Framework.TestFixtureAttribute;
+using TestMethod = NUnit.Framework.TestAttribute;
+using TestInitialize = NUnit.Framework.SetUpAttribute;
+using TestCleanup = NUnit.Framework.TearDownAttribute;
+using TestContext = System.Object;
+#endif
 
 namespace UnitTests
 {
@@ -353,8 +364,10 @@ namespace UnitTests
             // Multiple variable definitions.
             Assert.AreEqual(5, TestUtils.Evaluate("var a = 5; function a() { return 6 }; a"));
             Assert.AreEqual(5, TestUtils.Evaluate("function a() { return 6 }; var a = 5; a"));
+#if !NUNIT
             Assert.IsInstanceOfType(TestUtils.Evaluate("var a; function a() { return 6 }; a"), typeof(Jurassic.Library.FunctionInstance));
             Assert.IsInstanceOfType(TestUtils.Evaluate("function a() { return 6 }; var a; a"), typeof(Jurassic.Library.FunctionInstance));
+#endif
             Assert.AreEqual(7, TestUtils.Evaluate("function a() { return 6 }; function a() { return 7 } a()"));
             Assert.AreEqual(4, TestUtils.Evaluate("a(); function a() { return 1 } function a() { return 2 } function a() { return 3 } function a() { return 4 }"));
 

@@ -2,9 +2,20 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Jurassic;
 using Jurassic.Library;
+
+#if !NUNIT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Category = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
+#else
+using NUnit.Framework;
+using TestClass = NUnit.Framework.TestFixtureAttribute;
+using TestMethod = NUnit.Framework.TestAttribute;
+using TestInitialize = NUnit.Framework.SetUpAttribute;
+using TestCleanup = NUnit.Framework.TearDownAttribute;
+using TestContext = System.Object;
+#endif
 
 namespace UnitTests
 {
@@ -53,9 +64,13 @@ namespace UnitTests
             Assert.AreEqual("true", TypeConverter.ConvertTo<string>(engine, true));
 
             // ConvertTo ObjectInstance
+#if !NUNIT
             Assert.IsInstanceOfType(TypeConverter.ConvertTo<ObjectInstance>(engine, 100), typeof(NumberInstance));
+#endif
             Assert.AreEqual(100.0, ((NumberInstance)TypeConverter.ConvertTo<ObjectInstance>(engine, 100)).ValueOf());
+#if !NUNIT
             Assert.IsInstanceOfType(TypeConverter.ConvertTo<NumberInstance>(engine, 100), typeof(NumberInstance));
+#endif
         }
 
         [TestMethod]
@@ -338,16 +353,24 @@ namespace UnitTests
             TestUtils.ExpectException<JavaScriptException>(() => TypeConverter.ToObject(engine, Null.Value));
             TestUtils.ExpectException<JavaScriptException>(() => TypeConverter.ToObject(engine, null));
 
+#if !NUNIT
             Assert.IsInstanceOfType(TypeConverter.ToObject(engine, false), typeof(BooleanInstance));
+#endif
             Assert.AreEqual(false, TypeConverter.ToObject(engine, false).CallMemberFunction("valueOf"));
 
+#if !NUNIT
             Assert.IsInstanceOfType(TypeConverter.ToObject(engine, true), typeof(BooleanInstance));
+#endif
             Assert.AreEqual(true, TypeConverter.ToObject(engine, true).CallMemberFunction("valueOf"));
 
+#if !NUNIT
             Assert.IsInstanceOfType(TypeConverter.ToObject(engine, 13.9), typeof(NumberInstance));
+#endif
             Assert.AreEqual(13.9, TypeConverter.ToObject(engine, 13.9).CallMemberFunction("valueOf"));
 
+#if !NUNIT
             Assert.IsInstanceOfType(TypeConverter.ToObject(engine, "test"), typeof(StringInstance));
+#endif
             Assert.AreEqual("test", TypeConverter.ToObject(engine, "test").CallMemberFunction("valueOf"));
 
             // ToObject returns objects unaltered.

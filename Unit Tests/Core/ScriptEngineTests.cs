@@ -1,7 +1,18 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Jurassic;
 using Jurassic.Library;
+
+#if !NUNIT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Category = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
+#else
+using NUnit.Framework;
+using TestClass = NUnit.Framework.TestFixtureAttribute;
+using TestMethod = NUnit.Framework.TestAttribute;
+using TestInitialize = NUnit.Framework.SetUpAttribute;
+using TestCleanup = NUnit.Framework.TearDownAttribute;
+using TestContext = System.Object;
+#endif
 
 namespace UnitTests
 {
@@ -89,7 +100,7 @@ namespace UnitTests
             Assert.AreEqual(true, engine.Evaluate("test.a() === 7"));
         }
 
-        private class TestClass
+        private class TestClass2
         {
             public static void Test1() { return; }
             public static bool Test2(bool p) { return p; }
@@ -133,78 +144,78 @@ namespace UnitTests
 
             // Try setting a few Types.
             engine.SetGlobalValue("Math", typeof(Math));
-            engine.SetGlobalValue("TestClass", typeof(TestClass));
+            engine.SetGlobalValue("TestClass2", typeof(TestClass2));
 
             // Basic tests.
             Assert.AreEqual(-0.9589242746631384, engine.Evaluate("Math.Sin(5)"));
-            Assert.AreEqual(Undefined.Value, engine.Evaluate("TestClass.Test1()"));
-            Assert.AreEqual(false, engine.Evaluate("TestClass.Test2(false)"));
-            Assert.AreEqual(true, engine.Evaluate("TestClass.Test2(true)"));
-            Assert.AreEqual(250, engine.Evaluate("TestClass.Test3(255)"));
-            Assert.AreEqual(-123, engine.Evaluate("TestClass.Test4(-100)"));
-            Assert.AreEqual(-1234, engine.Evaluate("TestClass.Test5(-1001)"));
-            Assert.AreEqual(60123, engine.Evaluate("TestClass.Test6(61234)"));
-            Assert.AreEqual(-1234567890, engine.Evaluate("TestClass.Test7(-123456789)"));
-            Assert.AreEqual(-1234567890, engine.Evaluate("TestClass.Test7(-123456789.9)"));
-            Assert.AreEqual(0, engine.Evaluate("TestClass.Test7(-123456788.9)"));
-            Assert.AreEqual(1234567890, engine.Evaluate("TestClass.Test8(123456789)"));
-            Assert.AreEqual(1234567890, engine.Evaluate("TestClass.Test8(123456789.9)"));
-            Assert.AreEqual(0, engine.Evaluate("TestClass.Test8(123456788.9)"));
-            Assert.AreEqual(-12345678901234d, engine.Evaluate("TestClass.Test9(-123456789012345)"));
-            Assert.AreEqual(12345678901234d, engine.Evaluate("TestClass.Test10(123456789012345)"));
-            Assert.AreEqual(2.7182817459106445, engine.Evaluate("TestClass.Test11(3.14159265358979323)"));
-            Assert.AreEqual(2.71828182845904523, engine.Evaluate("TestClass.Test12(3.14159265358979323)"));
-            Assert.AreEqual(3.75, engine.Evaluate("TestClass.Test13(1.25)"));
-            Assert.AreEqual("b", engine.Evaluate("TestClass.Test14('a')"));
-            Assert.AreEqual("correct", engine.Evaluate("TestClass.Test15('test')"));
-            Assert.AreEqual(Null.Value, engine.Evaluate("TestClass.Test16()"));
-            Assert.AreEqual("correct", engine.Evaluate("TestClass.Test17(null)"));
-            Assert.AreEqual("correct", engine.Evaluate("TestClass.Test18('test')"));
-            Assert.AreEqual("correct", engine.Evaluate("TestClass.Test19(null)"));
-            Assert.AreEqual(6.1, engine.Evaluate("TestClass.Test20(5.1)"));
+            Assert.AreEqual(Undefined.Value, engine.Evaluate("TestClass2.Test1()"));
+            Assert.AreEqual(false, engine.Evaluate("TestClass2.Test2(false)"));
+            Assert.AreEqual(true, engine.Evaluate("TestClass2.Test2(true)"));
+            Assert.AreEqual(250, engine.Evaluate("TestClass2.Test3(255)"));
+            Assert.AreEqual(-123, engine.Evaluate("TestClass2.Test4(-100)"));
+            Assert.AreEqual(-1234, engine.Evaluate("TestClass2.Test5(-1001)"));
+            Assert.AreEqual(60123, engine.Evaluate("TestClass2.Test6(61234)"));
+            Assert.AreEqual(-1234567890, engine.Evaluate("TestClass2.Test7(-123456789)"));
+            Assert.AreEqual(-1234567890, engine.Evaluate("TestClass2.Test7(-123456789.9)"));
+            Assert.AreEqual(0, engine.Evaluate("TestClass2.Test7(-123456788.9)"));
+            Assert.AreEqual(1234567890, engine.Evaluate("TestClass2.Test8(123456789)"));
+            Assert.AreEqual(1234567890, engine.Evaluate("TestClass2.Test8(123456789.9)"));
+            Assert.AreEqual(0, engine.Evaluate("TestClass2.Test8(123456788.9)"));
+            Assert.AreEqual(-12345678901234d, engine.Evaluate("TestClass2.Test9(-123456789012345)"));
+            Assert.AreEqual(12345678901234d, engine.Evaluate("TestClass2.Test10(123456789012345)"));
+            Assert.AreEqual(2.7182817459106445, engine.Evaluate("TestClass2.Test11(3.14159265358979323)"));
+            Assert.AreEqual(2.71828182845904523, engine.Evaluate("TestClass2.Test12(3.14159265358979323)"));
+            Assert.AreEqual(3.75, engine.Evaluate("TestClass2.Test13(1.25)"));
+            Assert.AreEqual("b", engine.Evaluate("TestClass2.Test14('a')"));
+            Assert.AreEqual("correct", engine.Evaluate("TestClass2.Test15('test')"));
+            Assert.AreEqual(Null.Value, engine.Evaluate("TestClass2.Test16()"));
+            Assert.AreEqual("correct", engine.Evaluate("TestClass2.Test17(null)"));
+            Assert.AreEqual("correct", engine.Evaluate("TestClass2.Test18('test')"));
+            Assert.AreEqual("correct", engine.Evaluate("TestClass2.Test19(null)"));
+            Assert.AreEqual(6.1, engine.Evaluate("TestClass2.Test20(5.1)"));
 
             // Optional parameters.
-            Assert.AreEqual(6, engine.Evaluate("TestClass.Optional1(1)"));
-            Assert.AreEqual(9, engine.Evaluate("TestClass.Optional1(1, 5)"));
-            Assert.AreEqual(12, engine.Evaluate("TestClass.Optional1(1, 5, 6)"));
-            Assert.AreEqual(0, engine.Evaluate("TestClass.Optional2()"));
+            Assert.AreEqual(6, engine.Evaluate("TestClass2.Optional1(1)"));
+            Assert.AreEqual(9, engine.Evaluate("TestClass2.Optional1(1, 5)"));
+            Assert.AreEqual(12, engine.Evaluate("TestClass2.Optional1(1, 5, 6)"));
+            Assert.AreEqual(0, engine.Evaluate("TestClass2.Optional2()"));
 
             // ParamArray.
-            Assert.AreEqual(false, engine.Evaluate("TestClass.Params1()"));
-            Assert.AreEqual(false, engine.Evaluate("TestClass.Params1(1)"));
-            Assert.AreEqual(true, engine.Evaluate("TestClass.Params1(1, 2)"));
+            Assert.AreEqual(false, engine.Evaluate("TestClass2.Params1()"));
+            Assert.AreEqual(false, engine.Evaluate("TestClass2.Params1(1)"));
+            Assert.AreEqual(true, engine.Evaluate("TestClass2.Params1(1, 2)"));
 
             // Overload test.
             Assert.AreEqual(4, engine.Evaluate("Math.Max(3, 4)"));
             Assert.AreEqual(3, engine.Evaluate("Math.Abs(-3)"));
-            Assert.AreEqual(false, engine.Evaluate("TestClass.Overload1(1, 2)"));
-            Assert.AreEqual("Hello, world", engine.Evaluate<string>("TestClass.Overload1('Hello, ', 'world')"));
+            Assert.AreEqual(false, engine.Evaluate("TestClass2.Overload1(1, 2)"));
+            Assert.AreEqual("Hello, world", engine.Evaluate<string>("TestClass2.Overload1('Hello, ', 'world')"));
             engine.SetGlobalValue("Int32", typeof(int));
-            Assert.AreEqual(true, engine.Evaluate("TestClass.Overload1(new Int32(1), new Int32(2))"));
+            Assert.AreEqual(true, engine.Evaluate("TestClass2.Overload1(new Int32(1), new Int32(2))"));
 
             // Incorrect number of arguments.
             TestUtils.ExpectException<JavaScriptException>(() => engine.Evaluate("Math.Sin()"));
             TestUtils.ExpectException<JavaScriptException>(() => engine.Evaluate("Math.Sin(5, 6)"));
 
             // Cannot convert between types.
-            TestUtils.ExpectException<JavaScriptException>(() => engine.Evaluate("TestClass.Test2(5)"));
-            TestUtils.ExpectException<JavaScriptException>(() => engine.Evaluate("TestClass.Test7('test')"));
-            TestUtils.ExpectException<JavaScriptException>(() => engine.Evaluate("TestClass.Test12('test')"));
-            TestUtils.ExpectException<JavaScriptException>(() => engine.Evaluate("TestClass.Test15(5)"));
+            TestUtils.ExpectException<JavaScriptException>(() => engine.Evaluate("TestClass2.Test2(5)"));
+            TestUtils.ExpectException<JavaScriptException>(() => engine.Evaluate("TestClass2.Test7('test')"));
+            TestUtils.ExpectException<JavaScriptException>(() => engine.Evaluate("TestClass2.Test12('test')"));
+            TestUtils.ExpectException<JavaScriptException>(() => engine.Evaluate("TestClass2.Test15(5)"));
 
             // Strings are converted to characters, but only if they are exactly one character in length.
-            TestUtils.ExpectException<JavaScriptException>(() => engine.Evaluate("TestClass.Test14('')"));
-            TestUtils.ExpectException<JavaScriptException>(() => engine.Evaluate("TestClass.Test14('abc')"));
+            TestUtils.ExpectException<JavaScriptException>(() => engine.Evaluate("TestClass2.Test14('')"));
+            TestUtils.ExpectException<JavaScriptException>(() => engine.Evaluate("TestClass2.Test14('abc')"));
 
             // Undefined can only be passed as an argument if the argument is object.
-            TestUtils.ExpectException<JavaScriptException>(() => engine.Evaluate("TestClass.Test2(undefined)"));
-            TestUtils.ExpectException<JavaScriptException>(() => engine.Evaluate("TestClass.Test7(undefined)"));
-            TestUtils.ExpectException<JavaScriptException>(() => engine.Evaluate("TestClass.Test12(undefined)"));
+            TestUtils.ExpectException<JavaScriptException>(() => engine.Evaluate("TestClass2.Test2(undefined)"));
+            TestUtils.ExpectException<JavaScriptException>(() => engine.Evaluate("TestClass2.Test7(undefined)"));
+            TestUtils.ExpectException<JavaScriptException>(() => engine.Evaluate("TestClass2.Test12(undefined)"));
 
             // Null can only be passed if the target type is a reference type.
-            TestUtils.ExpectException<JavaScriptException>(() => engine.Evaluate("TestClass.Test2(null)"));
-            TestUtils.ExpectException<JavaScriptException>(() => engine.Evaluate("TestClass.Test7(null)"));
-            TestUtils.ExpectException<JavaScriptException>(() => engine.Evaluate("TestClass.Test12(null)"));
+            TestUtils.ExpectException<JavaScriptException>(() => engine.Evaluate("TestClass2.Test2(null)"));
+            TestUtils.ExpectException<JavaScriptException>(() => engine.Evaluate("TestClass2.Test7(null)"));
+            TestUtils.ExpectException<JavaScriptException>(() => engine.Evaluate("TestClass2.Test12(null)"));
         }
 
         private class TestInstance

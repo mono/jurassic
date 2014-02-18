@@ -2,7 +2,19 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
+//using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+#if !NUNIT
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Category = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
+#else
+using NUnit.Framework;
+using TestClass = NUnit.Framework.TestFixtureAttribute;
+using TestMethod = NUnit.Framework.TestAttribute;
+using TestInitialize = NUnit.Framework.SetUpAttribute;
+using TestCleanup = NUnit.Framework.TearDownAttribute;
+using TestContext = System.Object;
+#endif
 
 namespace UnitTests
 {
@@ -195,7 +207,9 @@ namespace UnitTests
                     Console.WriteLine("Test #{0}: {1:f1} milliseconds.", i + 1, elapsedTimes[i] * ticksToMilliseconds);
 
                 // Show the results in the unit test error message column.
+#if !NUNIT
                 throw new AssertInconclusiveException(string.Format("{0}: {1:f1} operations/sec (± {2:f1})", testName, 1000.0 / average, (1000.0 / (average - min) - 1000.0 / (average + max)) / 2));
+#endif
 
                 //if (testName != null)
                 //{

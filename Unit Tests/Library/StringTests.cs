@@ -2,8 +2,19 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Jurassic;
+
+#if !NUNIT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Category = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
+#else
+using NUnit.Framework;
+using TestClass = NUnit.Framework.TestFixtureAttribute;
+using TestMethod = NUnit.Framework.TestAttribute;
+using TestInitialize = NUnit.Framework.SetUpAttribute;
+using TestCleanup = NUnit.Framework.TearDownAttribute;
+using TestContext = System.Object;
+#endif
 
 namespace UnitTests
 {
@@ -98,29 +109,37 @@ namespace UnitTests
         [TestMethod]
         public void anchor()
         {
+#if !NUNIT
             Assert.AreEqual(@"<a name=""undefined"">haha</a>", (string)TestUtils.Evaluate("'haha'.anchor()"), true);
             Assert.AreEqual(@"<a name=""test"">haha</a>", (string)TestUtils.Evaluate("'haha'.anchor('test')"), true);
+#endif
             Assert.AreEqual(1, TestUtils.Evaluate("''.anchor.length"));
         }
 
         [TestMethod]
         public void big()
         {
+#if !NUNIT
             Assert.AreEqual("<big>haha</big>", (string)TestUtils.Evaluate("'haha'.big()"), true);
+#endif
             Assert.AreEqual(0, TestUtils.Evaluate("''.big.length"));
         }
 
         [TestMethod]
         public void blink()
         {
+#if !NUNIT
             Assert.AreEqual("<blink>haha</blink>", (string)TestUtils.Evaluate("'haha'.blink()"), true);
+#endif
             Assert.AreEqual(0, TestUtils.Evaluate("''.blink.length"));
         }
 
         [TestMethod]
         public void bold()
         {
+#if !NUNIT
             Assert.AreEqual("<b>haha</b>", (string)TestUtils.Evaluate("'haha'.bold()"), true);
+#endif
             Assert.AreEqual(0, TestUtils.Evaluate("''.bold.length"));
         }
 
@@ -220,24 +239,30 @@ namespace UnitTests
         [TestMethod]
         public void @fixed()
         {
+#if !NUNIT
             Assert.AreEqual("<tt>haha</tt>", (string)TestUtils.Evaluate("'haha'.fixed()"), true);
+#endif
             Assert.AreEqual(0, TestUtils.Evaluate("''.fixed.length"));
         }
 
         [TestMethod]
         public void fontcolor()
         {
+#if !NUNIT
             Assert.AreEqual(@"<font color=""undefined"">haha</font>", (string)TestUtils.Evaluate("'haha'.fontcolor()"), true);
             Assert.AreEqual(@"<font color=""red"">haha</font>", (string)TestUtils.Evaluate("'haha'.fontcolor('red')"), true);
+#endif
             Assert.AreEqual(1, TestUtils.Evaluate("''.fontcolor.length"));
         }
 
         [TestMethod]
         public void fontsize()
         {
+#if !NUNIT
             Assert.AreEqual(@"<font size=""5"">haha</font>", (string)TestUtils.Evaluate("'haha'.fontsize(5)"), true);
             Assert.AreEqual(@"<font size=""abc"">haha</font>", (string)TestUtils.Evaluate("'haha'.fontsize('abc')"), true);
             Assert.AreEqual(@"<font size=""undefined"">haha</font>", (string)TestUtils.Evaluate("'haha'.fontsize()"), true);
+#endif
             Assert.AreEqual(1, TestUtils.Evaluate("''.fontsize.length"));
         }
 
@@ -272,7 +297,9 @@ namespace UnitTests
         [TestMethod]
         public void italics()
         {
+#if !NUNIT
             Assert.AreEqual("<i>haha</i>", (string)TestUtils.Evaluate("'haha'.italics()"), true);
+#endif
             Assert.AreEqual(0, TestUtils.Evaluate("'haha'.italics.length"));
         }
 
@@ -313,8 +340,10 @@ namespace UnitTests
         [TestMethod]
         public void link()
         {
+#if !NUNIT
             Assert.AreEqual(@"<a href=""undefined"">haha</a>", (string)TestUtils.Evaluate("'haha'.link()"), true);
             Assert.AreEqual(@"<a href=""http://www.beer.com"">haha</a>", (string)TestUtils.Evaluate("'haha'.link('http://www.beer.com')"), true);
+#endif
             Assert.AreEqual(1, TestUtils.Evaluate("''.link.length"));
         }
 
@@ -768,7 +797,9 @@ namespace UnitTests
         [TestMethod]
         public void small()
         {
+#if !NUNIT
             Assert.AreEqual("<small>haha</small>", (string)TestUtils.Evaluate("'haha'.small()"), true);
+#endif
             Assert.AreEqual(0, TestUtils.Evaluate("''.small.length"));
         }
 
@@ -897,14 +928,18 @@ namespace UnitTests
         [TestMethod]
         public void strike()
         {
+#if !NUNIT
             Assert.AreEqual("<strike>haha</strike>", (string)TestUtils.Evaluate("'haha'.strike()"), true);
+#endif
             Assert.AreEqual(0, TestUtils.Evaluate("''.strike.length"));
         }
 
         [TestMethod]
         public void sub()
         {
+#if !NUNIT
             Assert.AreEqual("<sub>haha</sub>", (string)TestUtils.Evaluate("'haha'.sub()"), true);
+#endif
             Assert.AreEqual(0, TestUtils.Evaluate("''.sub.length"));
         }
 
@@ -965,15 +1000,19 @@ namespace UnitTests
         [TestMethod]
         public void sup()
         {
+#if !NUNIT
             Assert.AreEqual("<sup>haha</sup>", (string)TestUtils.Evaluate("'haha'.sup()"), true);
+#endif
             Assert.AreEqual(0, TestUtils.Evaluate("''.sup.length"));
         }
 
         [TestMethod]
         public void trim()
         {
+#if !NUNIT
             if (TestUtils.Engine == JSEngine.JScript)
                 Assert.Inconclusive("JScript does not support String.prototype.trim.");
+#endif
             Assert.AreEqual("hello world", TestUtils.Evaluate("'  hello world  '.trim()"));
             Assert.AreEqual("6.1234", TestUtils.Evaluate("x = new Number(6.1234); x.f = ''.trim; x.f()"));
             Assert.AreEqual(0, TestUtils.Evaluate("''.trim.length"));
