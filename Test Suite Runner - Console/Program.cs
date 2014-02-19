@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ namespace Jurassic.TestSuite
             var timer = System.Diagnostics.Stopwatch.StartNew();
             var engine = new Jurassic.ScriptEngine();
             Console.WriteLine("Start-up time: {0}ms", timer.ElapsedMilliseconds);
-            using (var testSuite = new TestSuite(@"..\..\..\Test Suite Files\"))
+            using (var testSuite = new TestSuite(Path.Combine ("..", "..", "..", "Test Suite Files")))
             {
                 //testSuite.RunInSandbox = true;
                 //testSuite.IncludedTests.Add("12.7-1");

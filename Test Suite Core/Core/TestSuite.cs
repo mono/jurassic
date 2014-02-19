@@ -47,7 +47,7 @@ namespace Jurassic.TestSuite
             this.IncludedTests = new List<string>();
 
             // Open the excludelist.xml file to generate a list of skipped file names.
-            var reader = System.Xml.XmlReader.Create(openFile(@"config\excludeList.xml"));
+            var reader = System.Xml.XmlReader.Create(openFile(Path.Combine ("config", "excludeList.xml")));
             reader.ReadStartElement("excludeList");
             do
             {
@@ -62,7 +62,7 @@ namespace Jurassic.TestSuite
             includeBuilder.AppendLine(ReadInclude(openFile, "ed.js"));
             this.includes = includeBuilder.ToString();
 
-            this.zipStream = openFile(@"suite\2012-05-18.zip");
+            this.zipStream = openFile(Path.Combine ("suite", "2012-05-18.zip"));
             this.zipFile = new ZipFile(this.zipStream);
             this.ApproximateTotalTestCount = (int)this.zipFile.Count;
         }
@@ -447,7 +447,7 @@ namespace Jurassic.TestSuite
 
                     // Create an AppDomain with internet sandbox permissions.
                     var e = new System.Security.Policy.Evidence();
-                    e.AddHostEvidence(new System.Security.Policy.Zone(System.Security.SecurityZone.Internet));
+                    //e.AddHostEvidence(new System.Security.Policy.Zone(System.Security.SecurityZone.Internet));
                     appDomain = AppDomain.CreateDomain(
                         "Jurassic sandbox",
                         null,
