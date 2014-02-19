@@ -144,7 +144,11 @@ namespace UnitTests
             Assert.AreEqual("102", TestUtils.Evaluate("x = 2; '10' + x"));
             Assert.AreEqual("10null", TestUtils.Evaluate("x = '10'; x + null"));
             Assert.AreEqual("51,2,3", TestUtils.Evaluate("x = 5; x + [1,2,3]"));
+#if !NUNIT
             StringAssert.StartsWith((string)TestUtils.Evaluate("x = 5; x + new Date(10)"), "5");
+#else
+            StringAssert.StartsWith("5", (string)TestUtils.Evaluate("x = 5; x + new Date(10)"));
+#endif
             Assert.AreEqual("5/abc/g", TestUtils.Evaluate("x = 5; x + /abc/g"));
             Assert.AreEqual("5[object Object]", TestUtils.Evaluate("x = 5; x + {}"));
 
